@@ -145,6 +145,19 @@ corresponding changes to python-ironic-inspector-client. If so, what does
 the user interface look like. If not, describe why there are REST API changes
 but no changes to the client.
 
+Ironic python agent impact
+--------------------------
+
+If this change affects the ironic-python-agent, please describe related
+changes here.
+
+Questions which need to be addressed in this section include:
+
+* What is the impact on the ironic-python-agent?
+
+* If the change affects existing functionality, how will an upgrade be
+  performed? How will it be tested?
+
 Performance and scalability impact
 ----------------------------------
 
