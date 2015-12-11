@@ -8,9 +8,9 @@
  The title of your blueprint
 =============================
 
-Include the URL of your launchpad blueprint:
+Include the URL of your launchpad RFE bug:
 
-https://blueprints.launchpad.net/ironic-inspector/+spec/example
+https://bugs.launchpad.net/ironic-inspector/+bug/example-id
 
 Introduction paragraph -- why are we doing anything?
 
