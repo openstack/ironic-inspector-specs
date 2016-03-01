@@ -10,15 +10,15 @@ Discover ironic nodes
 
 https://bugs.launchpad.net/ironic-inspector/+bug/1524753
 
-This spec proposes auto-discovery Ironic nodes feature.
+This spec proposes auto-discovery of Ironic nodes feature.
 
 Problem description
 ===================
 
 A large network might consist of hundreds of servers. Keeping track of these
-servers can be a time-consuming process. To simplify the addition of new
-servers could be done with auto-discovery. Auto-discovery is a process through
-which Ironic identifies a resource automatically so it's possible to manage it.
+servers can be a time-consuming process. Auto-discovery could simplify the
+addition of new servers into Ironic. It will identifies a resource
+automatically so it's possible to manage it.
 For now, Ironic is unable to automatically detect nodes. Operators have to
 create nodes manually and provide driver info for them.
 
@@ -26,10 +26,16 @@ Proposed change
 ===============
 
 Nodes that don't exist in the inspector node cache may still be booted and
-return inspection information to process, ``node-not-found-hook`` allows to
-handle that information. For discovery new implementation called
-``enroll_node_not_found_hook`` should be specified. It will create a node
-with ``fake`` driver.
+return inspection information to process, the ``node-not-found-hook`` hook
+is run by the inspector when it receives information from a node it can not
+identify. For auto-discovery a new hook that will plugin at this point will
+be written, called ``enroll``.
+
+The hook will enroll the unknown node into Ironic with the ``fake`` driver
+(this driver is a configurable option, set ``enroll_node_driver`` in the
+configuration file allows to change the Ironic driver). Also the ``enroll``
+hook will set the ``ipmi_address`` property on the new node, if its available
+in the introspection data we received.
 
 To customize discovery, introspection rules will be used, it  allows operators
 to control the discovery process. A simple rule to match all new nodes and
@@ -62,9 +68,9 @@ enroll them in Ironic with the ``agent_ipmitool`` driver will looks like::
     ]
 
     "conditions": [
-        {'op': 'eq', 'field': 'node://driver_info/deploy_ramdisk',
+        {'op': 'eq', 'field': 'node://driver_info.deploy_ramdisk',
          'multiple': 'all', 'value': None},
-        {'op': 'eq', 'field': 'node://driver_info/deploy_kernel',
+        {'op': 'eq', 'field': 'node://driver_info.deploy_kernel',
          'multiple': 'all', 'value': None}
     ]
 
@@ -93,6 +99,19 @@ Rule changes:
 
         {data[ipmi_address]} - ``ipmi_address`` attribute from introspection
                                data will be fetched.
+
+All nodes discovered and enrolled via the ``enroll`` hook, will contain an
+``auto_discovered`` flag in the introspection data, this flag makes it
+possible to distinguish between manually enrolled nodes and auto-discovered
+nodes in the introspection rules using the rule condition ``eq``::
+
+    "description": "Enroll auto-discovered nodes with fake driver",
+    "actions": [
+        {'action': 'set-attribute', 'path': 'driver', 'value': 'fake'}
+    ]
+    "conditions": [
+        {'op': 'eq', 'field': 'data://auto_discovered', 'value': True}
+    ]
 
 Creating new actions will allow the node info to be consumed in different
 ways. Proposed approach is pretty flexible, so more sophisticated conditions
