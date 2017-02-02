@@ -20,7 +20,5 @@ Template for Writing Ironic Inspector Specs
 Indices and tables
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
