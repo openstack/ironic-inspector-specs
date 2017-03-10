@@ -218,6 +218,28 @@ such as:
   other hooks would implement the feature is required. Describe how
   existing hooks will continue to function after the change.
 
+Upgrades and Backwards Compatibility
+------------------------------------
+
+Care must be taken to support our users by not breaking backwards compatibility
+with either REST API or plugins API for data processing.
+
+* If your proposal includes any changes to the REST API, describe how existing
+  clients will continue to function when interacting with an upgraded API
+  server.
+
+* If your proposal includes any changes to the plugins API, describe how
+  existing plugins implementations will continue to function with the new
+  plugin interface.
+
+* Describe what testing you will be adding to ensure that backwards
+  compatibility is maintained.
+
+* If deprecating an existing feature or API, describe the deprecation plan, and
+  for how long compatibility will be maintained.
+
+* If new code should need something more than 'db migrations', describe
+  upgrading procedure here.
 
 Implementation
 ==============
