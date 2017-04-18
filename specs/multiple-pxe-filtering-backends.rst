@@ -54,15 +54,9 @@ items:
 * ``init_filter(self)`` may be synchronous; initializes internal filter state.
   This method may perform system-wide filter state changes.
 
-* ``whitelist_node_ids([<node_id>, <node_id>, ...])`` should be asynchronous;
-  enables the DHCP requests from these nodes.
-
-* ``blacklist_node_ids([<node_id>, <node_id>, ...])`` should be asynchronous;
-  disables the DHCP requests from specified nodes.
-
-* ``remove_node_ids([<node_id>, <node_id>, ...])`` should be asynchronous;
-  removes nodes no longer tracked by **ironic/inspector** from both the filter
-  lists.
+* ``sync(self, ironic=None)`` called in a background thread; performs the
+  synchronization between **ironic**, **inspector** and the driver internal
+  state e.g updating ``iptables``.
 
 * ``tear_down_filter(self)`` may be synchronous; resets internal filter state.
   This method may perform system-wide filter state changes.
@@ -70,14 +64,13 @@ items:
 This abstract interface shall reside in **inspector** tree, together with an
 ``iptables`` and a ``noop`` driver implementation.
 
-Any driver-specific High-Availability concerns (such as leader election) are
-out of scope of this spec and the **inspector** code base and should be
-addressed by particular drivers internally.
+In addition, a *generic* ``get_periodic_sync_task`` filter driver method shall
+be provided that particular driver implementations may consider overriding to
+e.g opt-out from the periodic synchronization.
 
-We also suggest to drop introspection status cache cleaning to reduce the
-synchronization between the filter and **ironic** and remove the periodic
-firewall update procedure in favor of the periodic **ironic** synchronization
-procedure.
+Any driver-specific High-Availability concerns are out of scope of this
+spec and the **inspector** code base and should be addressed by particular
+drivers internally.
 
 Alternatives
 ------------
@@ -135,9 +128,6 @@ Deployer impact
 * The ``firewall.firewall_update_period`` configuration option shall be
   *deprecated and ignored*.
 
-* The inspector ``node_status_keep_time`` shall be *deprecated and ignored*,
-  implying caching a node inspection status for the lifetime of the node.
-
 * Deployer might consider custom drivers fitting their needs.
 
 * A "standard" **grenade** testing with the firewall-based driver will be
@@ -147,12 +137,31 @@ Developer impact
 ----------------
 
 Developers of custom PXE filter drivers should adhere to the proposed driver
-interface. Any High-availability considerations should be addressed by the
-drivers internally. The `stevedore`_ library will be used to implement the
+interface. Any specific High-availability considerations should be addressed by
+the drivers internally. The `stevedore`_ library will be used to implement the
 driver loading mechanism.
 
 Implementation
 ==============
+
+To illustrate what a driver implementation may look like we list what
+information will a particular driver have to deal with internally, comparing
+possible ``sync`` method implementations of the drivers.
+
+.. table:: Features
+
+    +---------------+----------------------------+----------------------------+----------------------------+
+    | Driver        | Whitelist                  | Blacklist                  | Discovery support          |
+    +===============+============================+============================+============================+
+    | neutron       | Update the PXE port with   | Clear the inspection       | N/A (a separate VLAN)      |
+    |               | the inspection network ID  | network ID on the PXE port |                            |
+    +---------------+----------------------------+----------------------------+----------------------------+
+    | dnsmasq       | Allow a lease for a MAC    | Deny a lease for a MAC     | Grant leases by default    |
+    |               | address explicitly         | address explicitly         |                            |
+    +---------------+----------------------------+----------------------------+----------------------------+
+    | iptables      | Subtract the MAC addresses | Deny access for the MAC    | Accept DHCP traffic by     |
+    |               | from the blacklist         | addresses                  | default                    |
+    +---------------+----------------------------+----------------------------+----------------------------+
 
 Assignee(s)
 -----------
@@ -165,14 +174,11 @@ Work Items
 
 * introduce the abstract driver interface
 * refactoring current firewall-based filter
-* deprecate the the ``node_status_keep_time`` configuration option and make the
-  status records last for the node lifetime
 
 Dependencies
 ============
 
-The `stevedore`_ library will be used to implement the driver loading
-mechanism.
+None
 
 Testing
 =======
