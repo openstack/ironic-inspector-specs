@@ -17,7 +17,7 @@ scheduling. Currently, total and physical memory size are collected.
 However, more specific information about DIMMs would help deployers to
 schedule nodes for low latency workloads. Similarly, CPU data fields such as
 signature and socket designation would be useful for inventory management.
-This spec proposes a collector for the **ironic-inspector** to obtain a few
+This spec proposes a collector for the **ironic-python-agent** to obtain a few
 more key details of CPU, memory, and BIOS.
 
 
@@ -25,12 +25,12 @@ Problem description
 ===================
 
 Configuring nodes for better performance is a priority from the operator’s
-point of view. The operator can specify node capabilities in a nova flavor
+point of view. The operator can specify node capabilities in a **nova** flavor
 for a node to be selected for `scheduling`_. Collecting key CPU, memory, and
 BIOS data fields will enable operator to create flavors based on discovered
 hardware features.
 
-Here is a list of the key data fields that will be of use for this purpose:
+Here is a list of the key data fields that might be used for this purpose:
 
 * ``BIOS Version``: To know which firmware version is running on the host, for
   maintenance reasons.
@@ -54,7 +54,7 @@ The proposed change is to implement a collector for listing the details of the
 processor, memory, and BIOS in the **ironic-python-agent**'s inspector module
 using the `dmidecode utility`_ and then returning the collected data to the
 **ironic-inspector**. The processing done on this data in the
-**ironic-python-agent** is limited, to allow for the server side plugin to
+**ironic-python-agent** is limited, to allow for a server side plugin to
 process as much or as little of the data as needed.
 
 .. note::
@@ -71,6 +71,9 @@ process as much or as little of the data as needed.
 The format of the data collected by the new collector in
 **ironic-python-agent** looks like this::
 
+  "inventory": {
+  }
+  ...
   "dmi": {
     "bios": {
       "Vendor": <vendor name>,
@@ -194,8 +197,8 @@ Deployer impact
 
 The deployer will be able to get more data about the CPUs, DIMMs, and BIOS.
 This information would be useful in configuring the system for better
-performance. The deployer will provide the optional collector via
-the ``ipa-inspection-collectors`` kernel argument.
+performance. The deployer will enable the optional collector
+``dmi-decode`` via the ``ipa-inspection-collectors`` kernel argument.
 
 
 Developer impact
