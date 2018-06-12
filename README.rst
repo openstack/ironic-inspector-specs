@@ -2,8 +2,8 @@
 ironic-inspector specs
 ===============================
 
-.. image:: http://governance.openstack.org/badges/ironic-inspector-specs.svg
-    :target: http://governance.openstack.org/reference/tags/index.html
+.. image:: https://governance.openstack.org/tc/badges/ironic-inspector-specs.svg
+    :target: https://governance.openstack.org/tc/reference/tags/index.html
 
 Specs for Ironic Inspector
 
