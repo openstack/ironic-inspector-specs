@@ -515,7 +515,7 @@ We assume a Load Balancer (HAProxy) shielding the user from the
 inspector service. All the inspector API process instances should
 export the same REST API. Each API Request should be handled in a
 separate asynchronous thread instance (as is the case now with the
-`Flask <https://pypi.python.org/pypi/Flask>`_ framework). At any point
+`Flask <https://pypi.org/project/Flask>`_ framework). At any point
 in time, any of the process instances may serve any request.
 
 .. _partitioning-concerns:
