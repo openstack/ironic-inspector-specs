@@ -151,6 +151,7 @@ Unit test cases will be added.
 References
 ==========
 
-.. [1] https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
-.. [2] https://linux.die.net/man/1/biosdevname
+https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
+
+https://linux.die.net/man/1/biosdevname
 

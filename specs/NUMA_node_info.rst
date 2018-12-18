@@ -211,8 +211,12 @@ Unit test cases will be added.
 References
 ==========
 
-.. [#] http://dpdk.org/doc/guides-16.04/linux_gsg/nic_perf_intel_platform.html
-.. [#] http://docs.openstack.org/admin-guide/compute-cpu-topologies.html
-.. [#] https://en.wikipedia.org/wiki/Non-uniform_memory_access
-.. [#] http://www.linuxsecrets.com/blog/6managing-linux-systems/2015/10/01/1658-how-to-identify-a-pci-slot-to-physical-socket-in-a-multi-processor-system-with-linux
-.. [#] https://patchwork.kernel.org/patch/5142561/
+http://dpdk.org/doc/guides-16.04/linux_gsg/nic_perf_intel_platform.html
+
+http://docs.openstack.org/admin-guide/compute-cpu-topologies.html
+
+https://en.wikipedia.org/wiki/Non-uniform_memory_access
+
+http://www.linuxsecrets.com/blog/6managing-linux-systems/2015/10/01/1658-how-to-identify-a-pci-slot-to-physical-socket-in-a-multi-processor-system-with-linux
+
+https://patchwork.kernel.org/patch/5142561/
