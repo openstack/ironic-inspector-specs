@@ -4,13 +4,13 @@
 
  http://creativecommons.org/licenses/by/3.0/legalcode
 
-=============================
- The title of your blueprint
-=============================
+==================
+Title of your Spec
+==================
 
-Include the URL of your launchpad RFE bug:
+Include the URL of your StoryBoard story (which should have an `rfe`` tag):
 
-https://bugs.launchpad.net/ironic-inspector/+bug/example-id
+https://storyboard.openstack.org/#!/story/XXXXXXX
 
 Introduction paragraph -- why are we doing anything?
 
@@ -20,24 +20,19 @@ Some notes about using this template:
 
 * Please wrap text at 79 columns.
 
-* The filename in the git repository must match the launchpad URL, for
-  example a URL of:
-  https://blueprints.launchpad.net/ironic-inspector/+spec/awesome-thing
-  must be named awesome-thing.rst
-
-* Please do not delete any of the sections in this template.  If you have
+* Please do not delete any of the sections in this template. If you have
   nothing to say for a whole section, just write: None
 
-* For help with syntax, see http://sphinx-doc.org/rest.html
+* For help with syntax, see http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
 
 * To test out your formatting, build the docs using tox, or see:
   http://rst.ninjs.org
 
 * If you would like to provide a diagram with your spec, ascii diagrams are
-  required.  http://asciiflow.com/ is a very nice tool to assist with making
-  ascii diagrams.  The reason for this is that the tool used to review specs is
-  based purely on plain text.  Plain text will allow review to proceed without
-  having to look at additional files which can not be viewed in gerrit.  It
+  required. http://asciiflow.com/ is a very nice tool to assist with making
+  ascii diagrams. The reason for this is that the tool used to review specs is
+  based purely on plain text. Plain text will allow review to proceed without
+  having to look at additional files which can not be viewed in gerrit. It
   will also allow inline feedback on the diagram itself.
 
 Problem description
@@ -73,7 +68,7 @@ Data model impact
 -----------------
 
 Changes which require modifications to the data model often have a wider impact
-on the system.  The community often has strong opinions on how the data model
+on the system. The community often has strong opinions on how the data model
 should be evolved, from both a functional and performance perspective. It is
 therefore important to capture and gain agreement as early as possible on any
 proposed changes to the data model.
@@ -157,6 +152,16 @@ Questions which need to be addressed in this section include:
 
 * If the change affects existing functionality, how will an upgrade be
   performed? How will it be tested?
+
+Ironic impact
+-------------
+
+If this change affects the ironic, please describe related changes here.
+
+Questions which need to be addressed in this section include:
+
+* What is the impact on the ironic, or the inspector inspect interface.
+
 
 Performance and scalability impact
 ----------------------------------
@@ -254,10 +259,10 @@ If more than one person is working on the implementation, please designate the
 primary author and contact.
 
 Primary assignee:
-  <launchpad-id or None>
+  <IRC handle, email address, or None>
 
-Can optionally can list additional ids if they intend on doing
-substantial implementation work on this blueprint.
+Other contributors:
+  <IRC handle, email address, None>
 
 Work Items
 ----------
