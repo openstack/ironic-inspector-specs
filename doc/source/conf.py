@@ -95,5 +95,5 @@ latex_documents = [
 
 # openstackdocstheme options
 repository_name = 'openstack/ironic-inspector-specs'
-bug_project = 'ironic-inspector'
-bug_tag = ''
+use_storyboard = True
+
