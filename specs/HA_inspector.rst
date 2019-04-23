@@ -565,8 +565,8 @@ HA Firewall decomposition
 
 The firewall facility can be replaced by Neutron once it adopts
 `enhancements to subnet DHCP options
-<https://review.openstack.org/#/c/247027/>`_ and `allows serving DHCP
-to unknown hosts <https://review.openstack.org/#/c/255240/>`_.  We're
+<https://review.opendev.org/#/c/247027/>`_ and `allows serving DHCP
+to unknown hosts <https://review.opendev.org/#/c/255240/>`_.  We're
 keeping Inspector's firewall facility for users that are interested in
 stand-alone deployments.
 
@@ -800,9 +800,9 @@ During the analysis process we considered these blueprints:
   <https://blueprints.launchpad.net/ironic-inspector/+spec/abort-introspection>`_
 * `Node States
   <https://blueprints.launchpad.net/ironic-inspector/+spec/node-states>`_
-* `Node Locking <https://review.openstack.org/#/c/244750/5>`_
+* `Node Locking <https://review.opendev.org/#/c/244750/5>`_
 * `Oslo.messaging at-least-once semantics
-  <https://review.openstack.org/#/c/256342/>`_
+  <https://review.opendev.org/#/c/256342/>`_
 
 RFEs:
 
@@ -817,9 +817,9 @@ RFEs:
 * `Watchable store for Tooz
   <https://bugs.launchpad.net/python-tooz/+bug/1528495>`_
 * `Enhanced Network/Subnet DHCP Options
-  <https://review.openstack.org/#/c/247027/>`_
+  <https://review.opendev.org/#/c/247027/>`_
 * `Neutron DHCP serve unknown hosts
-  <https://review.openstack.org/#/c/255240/>`_
+  <https://review.opendev.org/#/c/255240/>`_
 
 Community sources:
 
@@ -829,7 +829,7 @@ Community sources:
   <http://lists.openstack.org/pipermail/openstack-dev/2015-November/080622.html>`_
 * Joshua Harlow's comment that `Tooz should implement the
   at-least-once semantics not Oslo.messaging
-  <https://review.openstack.org/#/c/256342/7/specs/mitaka/at-least-once-guarantee.rst@305>`_
+  <https://review.opendev.org/#/c/256342/7/specs/mitaka/at-least-once-guarantee.rst@305>`_
 
 RFCs:
 

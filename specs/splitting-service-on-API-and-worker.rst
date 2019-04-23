@@ -320,7 +320,7 @@ References
 ==========
 
 
-.. [1] `Inspection states <http://git.openstack.org/cgit/openstack/ironic-inspector/tree/ironic_inspector/introspection_state.py>`_
+.. [1] `Inspection states <https://opendev.org/openstack/ironic-inspector/src/branch/master/ironic_inspector/introspection_state.py>`_
 
 .. [2] `RPC Client <https://docs.openstack.org/developer/oslo.messaging/rpcclient.html>`_
 

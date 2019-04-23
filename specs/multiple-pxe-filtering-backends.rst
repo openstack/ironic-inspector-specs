@@ -192,7 +192,7 @@ References
 
 .. [1] `HA Inspector effort <http://specs.openstack.org/openstack/ironic-inspector-specs/specs/HA_inspector.html>`_
 
-.. [2] `Tripleo routed networks ironic inspector effort <https://review.openstack.org/#/c/421011/>`_
+.. [2] `Tripleo routed networks ironic inspector effort <https://review.opendev.org/#/c/421011/>`_
 
 .. [3] `Pike PTG inspector architectural session outcome <https://etherpad.openstack.org/p/ironic-pike-ptg-inspector-arch>`_
 

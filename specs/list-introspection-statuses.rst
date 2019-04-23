@@ -71,7 +71,7 @@ any repetitions are ignored.
 
 .. _HA inspector spec: https://specs.openstack.org/openstack/ironic-inspector
                        -specs/specs/HA_inspector.html
-.. _introspection state patch: https://review.openstack.org/#/c/348943/
+.. _introspection state patch: https://review.opendev.org/#/c/348943/
 
 Time query
 ----------
@@ -261,7 +261,7 @@ A `partial implementation`_ of the status list API endpoint for the ironic
 inspector project is currently blocked by this specification landing. It
 supports time-based filtering and pagination already.
 
-.. _partial implementation: https://review.openstack.org/#/c/344921
+.. _partial implementation: https://review.opendev.org/#/c/344921
 
 Dependencies
 ============

@@ -480,7 +480,7 @@ Dependencies
 
 The API for listing all introspection statuses affects similar commands so
 would be good to wait until that is complete.
-https://review.openstack.org/#/c/344921/
+https://review.opendev.org/#/c/344921/
 
 Testing
 =======
@@ -508,7 +508,7 @@ References
    https://standards.ieee.org/findstds/standard/802.1AB-2016.html
 
 .. _IPA change to add LLDP support:
-   https://review.openstack.org/#/c/320584/
+   https://review.opendev.org/#/c/320584/
 
 .. _IEEE Std 802.1Q-2014:
    https://standards.ieee.org/findstds/standard/802.1Q-2014.html
