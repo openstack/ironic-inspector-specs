@@ -83,9 +83,10 @@ htmlhelp_basename = '%sdoc' % project
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass
 # [howto/manual]).
+
 latex_documents = [
     ('index',
-     '%s.tex' % project,
+     'doc-ironic-inspector-specs.tex',
      project,
      u'OpenStack Ironic Inspector Team', 'manual'),
 ]
