@@ -5,13 +5,13 @@
  http://creativecommons.org/licenses/by/3.0/legalcode
 
 ========================================
-Incorporate ETCD as service coordination
+Incorporate Tooz as service coordination
 ========================================
 
 https://storyboard.openstack.org/#!/story/2001842
 
 This spec is part of the ironic-inspector HA work. To further split the
-inspector service, this spec proposes to introduce etcd as the base service
+inspector service, this spec proposes to introduce tooz as the base service
 for the coordination between ironic-inspector API and conductor services.
 
 Problem description
@@ -37,13 +37,16 @@ inspector conductor should the request be delivered to.
 Proposed change
 ===============
 
+Includes ``tooz`` [#]_ as project requirement for the service coordination.
+tooz supports various backends via drivers [#]_ which provides features like
+distributed lock, group member management.
+
 etcd [#]_ is a distributed key value store that provides a reliable way to
-store data across a cluster of machines. As etcd is already a base service
-for the OpenStack platform [#]_, the spec proposes to add ``python-etcd3``
-and ``tooz`` [#]_ as project requirements for the service coordination.
-``tooz`` provides several feature encapsulations like group management,
-locking, etc. Group management is only implemented for ETCD API v3, thus
-``python-etcd3`` is required.
+store data across a cluster of machines. etcd is a backend driver supported
+by tooz, and it's also a base service for the OpenStack platform [#]_. Note
+that tooz only supports ETCD API v3 for group management, to use etcd as a
+backend driver, libraries such as ``python-etcd3`` or ``python-etcd3gw`` is
+needed.
 
 All proposed work is implemented via ``tooz`` interfaces. Each service will
 create a coordinator and keep heartbeating, the example workflow for
@@ -51,7 +54,7 @@ ironic-inspector API service is listed below:
 
 #. Create a coordinator with hostname
 #. Create a predefined group, bypass if the group already exists. By default,
-   the group name is ``ironic-inspector-service-group``.
+   the group name is ``ironic_inspector.service_group``.
 #. Upon each API request, the API service will query members from the group,
    randomly pick one conductor and deliver the request to it through rpc
    mechanism.
@@ -60,32 +63,32 @@ The example workflow for ironic-inspector conductor service is listed below:
 
 #. Create a coordinator with hostname
 #. Join the predefined group as a member, the group name is
-   ``ironic-inspector-service-group`` by default. If the group does not exist,
+   ``ironic_inspector.service_group`` by default. If the group does not exist,
    it will be created.
 #. Leave group when service is shutdown.
 
-The spec will add two console scripts to support executing API and conductor
-services separately, namely ``ironic-inspector-api`` and
-``ironic-inspector-conductor``.
+The spec will add a console script ``ironic-inspector-conductor`` for executing
+the ironic-inspector conductor service, add a wsgi wrapper for using the API
+service under WSGI containers, there will be an automatically created
+``ironic-inspector-api-wsgi`` script for console.
 
 To keep backwards compatibility, ``ironic-inspector`` continues to serve the
-single process mode, and sticks to use the fake messaging driver. It will be
-removed when gets obsolete.
+single process mode, and sticks to use the fake messaging driver for now. It
+will be removed when gets obsolete. We expect to add ``json-rpc`` in the
+future.
 
-Adds a configuration option ``[DEFAULT]rpc_transport`` to specify the rpc
-backend, values can be ``fake`` (the default) or ``oslo``. This option will be
-used to determine current execution mode for three console scripts mentioned
-above. ``ironic-inspector`` only runs when the rpc transport is ``fake``, while
-``ironic-inspector-api`` and ``ironic-inspector-conductor`` only run when it's
-not ``fake``. We expect to add ``json-rpc`` in the future.
+Adds a boolean configuration option ``[DEFAULT]standalone`` to specify the
+executing mode of ironic-inspector. The ``ironic-inspector`` script only runs
+when standalone is True, while the script for splitted service of
+ironic-inspector API and conductor only runs when standalone is False.
 
 There is no distributed locking support for ironic-inspector, this spec will
 introduce an abstract lock layer, and implement locking support based on tooz.
 After the spec is implemented, there will be two kind of locks: internal and
-etcd. The using of different locking types is decided internally and not
+tooz. The using of different locking types is decided internally and not
 exposed to end users at the moment. ironic-inspector running as a single
-process will adopt semaphore based internal locking, otherwise etcd locking
-will be used.
+process will adopt semaphore based internal lock, otherwise tooz lock will
+be used.
 
 
 Alternatives
@@ -93,7 +96,7 @@ Alternatives
 
 Though it's totally workable to utilize database as the coordination source
 just like ironic, it would be much lighter if implemented with tooz.
-tooz also supports multiple backends, which brings more possibilities in
+tooz also supports multiple backends, which brings more flexibility in
 deployement.
 
 Data model impact
@@ -124,8 +127,8 @@ None.
 Performance and scalability impact
 ----------------------------------
 
-There should be no obvious performance and scalability impact before services
-are actually splitted.
+Running ironic-inspector services distributedly is expected to have
+performance gaining, as well as the ability of horizontal scalablility.
 
 Security impact
 ---------------
@@ -135,28 +138,9 @@ None.
 Deployer impact
 ---------------
 
-A new configuration section ``etcd`` with following options will be added to
-support etcd operation:
-
-* ``host`` and ``port``: specify the etcd service endpoint.
-* ``ca_cert``, ``cert_key`` and ``cert_cert``: specify SSL related
-  authentication.
-* ``timeout``: connection timeout per request.
-* ``user`` and ``password``: the username and password if etcd authentication
-  is required.
-* ``group_path``: the name of service group used to coordinate inspector
-  services, it can be a key path, a key prefix or both. By default, the value
-  will be ``/openstack/ironic-inspector/service-group``.
-* ``lock_prefix``: a string prefix for a lock name, for example, locking a node
-  ``fake-node-uuid`` with prefix ``ironic-inspector`` will have a lock name of
-  ``ironic-inspector.fake-node-uuid`` passed to tooz.
-
-The configuration option ``[DEFAULT]rpc_transport`` defaults to ``fake`` which
-has no impact on the single process ``ironic-inspector``.
-
-New options introduced in this spec only needs to be configured when ironic
-inspector service is running distributedly.
-
+A new configuration option ``[coordination]backend_url`` will be added to
+support the configuration of tooz backend driver. This is only used when
+``[DEFAULT]standalone`` is False.
 
 Developer impact
 ----------------
@@ -167,9 +151,10 @@ Upgrades and Backwards Compatibility
 ------------------------------------
 
 The single process ``ironic-inspector`` service is unchanged. However,
-for installations adopt distributed ironic-inspector services, the etcd v3
-will be a mandatory requirement, and necessary configuration options will
-be required.
+for installations adopt distributed ironic-inspector services, corresponding
+libraries need to be installed for the tooz backend driver configured to be
+used by tooz. For example, ``python3-etcd3gw`` for interaction with etcd,
+``python3-pymemcache`` for interaction with memcached.
 
 Implementation
 ==============
@@ -192,9 +177,9 @@ Implement proposed work.
 Dependencies
 ============
 
-``python-etcd3`` and ``tooz`` are required library support for ironic-inspector
-running as separated services.
-There should be a etcd v3 service running in the same cloud.
+``tooz`` are required library support for ironic-inspector running as
+separated services. The dependency of tooz backend driver should be satisfied
+as well.
 
 Testing
 =======
@@ -204,6 +189,7 @@ Will be covered by unittest and bifrost.
 References
 ==========
 
+.. [#] https://docs.openstack.org/tooz/latest/user/index.html
+.. [#] https://docs.openstack.org/tooz/latest/user/drivers.html
 .. [#] https://coreos.com/etcd/
 .. [#] https://governance.openstack.org/tc/reference/base-services.html#current-list-of-base-services
-.. [#] https://docs.openstack.org/tooz/latest/user/index.html
