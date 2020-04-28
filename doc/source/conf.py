@@ -29,7 +29,7 @@ extensions = [
 ]
 
 # Feed configuration for yasfb
-feed_base_url = 'http://specs.openstack.org/openstack/ironic-inspector'
+feed_base_url = 'https://specs.openstack.org/openstack/ironic-inspector'
 feed_author = 'OpenStack Ironic Inspector Team'
 
 exclude_patterns = [
@@ -97,4 +97,3 @@ latex_documents = [
 # openstackdocstheme options
 repository_name = 'openstack/ironic-inspector-specs'
 use_storyboard = True
-
