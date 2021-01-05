@@ -54,8 +54,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Ironic Inspector Specs'
-copyright = u'%s, OpenStack Ironic Inspector Team' % datetime.date.today().year
+project = 'Ironic Inspector Specs'
+copyright = '%s, OpenStack Ironic Inspector Team' % datetime.date.today().year
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 add_function_parentheses = True
@@ -88,7 +88,7 @@ latex_documents = [
     ('index',
      'doc-ironic-inspector-specs.tex',
      project,
-     u'OpenStack Ironic Inspector Team', 'manual'),
+     'OpenStack Ironic Inspector Team', 'manual'),
 ]
 
 # Example configuration for intersphinx: refer to the Python standard library.
